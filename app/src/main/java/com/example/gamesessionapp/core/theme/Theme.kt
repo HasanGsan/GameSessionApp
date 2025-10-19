@@ -1,6 +1,5 @@
-package com.example.gamesessionapp.ui.theme
+package com.example.gamesessionapp.core.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -1,6 +1,7 @@
 package com.example.gamesessionapp.features.user.weather
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.statekeeper.consume
 import com.example.gamesessionapp.data.models.WeatherData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,8 +11,15 @@ class WeatherComponent(
     componentContext: ComponentContext
 ) : ComponentContext by componentContext {
 
-    private val _state = MutableStateFlow(WeatherState())
+    private val initialState: WeatherState =
+            componentContext.stateKeeper.consume<WeatherState>("weather_state") ?: WeatherState()
+
+    private val _state = MutableStateFlow(initialState)
     val state: StateFlow<WeatherState> = _state
+
+    init {
+        componentContext.stateKeeper.register("weather_state") { _state.value }
+    }
 
     fun onIntent(intent: WeatherIntent) {
 
@@ -62,10 +70,14 @@ class WeatherComponent(
             }
 
             WeatherIntent.ClearAndCreateNewRequest -> {
+
+                if(_state.value.isFormValid) {
+                    onIntent(WeatherIntent.AddToHistory)
+                }
+
                 onIntent(WeatherIntent.ShowInputs)
-                onIntent(WeatherIntent.AddToHistory)
                 _state.update {
-                    it.copy( city = "", degrees = "", weatherDescription = "", isFormValid = false)
+                    it.copy( city = "", degrees = "", weatherDescription = "", isFormValid = false, searchHistory = it.searchHistory)
                 }
             }
 

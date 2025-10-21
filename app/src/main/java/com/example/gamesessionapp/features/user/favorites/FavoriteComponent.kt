@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class FavoriteComponent(
     componentContext: ComponentContext,
     private val repository: NewsRepository
-) {
+) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(FavoriteState())
     val state: StateFlow<FavoriteState> = _state.asStateFlow()
@@ -73,5 +73,4 @@ class FavoriteComponent(
             )
         }
     }
-
 }

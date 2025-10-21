@@ -19,6 +19,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -33,9 +34,12 @@ fun FavoriteScreen(
     modifier: Modifier = Modifier,
     component: FavoriteComponent
 ) {
-
     val uiState = component.state.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        component.onIntent(FavoriteIntent.LoadFavorites)
+    }
 
     Column(
         modifier = Modifier
@@ -85,5 +89,4 @@ fun FavoriteScreen(
             }
         }
     }
-
 }

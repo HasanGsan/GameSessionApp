@@ -1,5 +1,7 @@
 package com.example.gamesessionapp.features.user.news
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,16 +23,27 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.gamesessionapp.R
 import com.example.gamesessionapp.features.user.news.cards.NewsCard
+import com.example.gamesessionapp.features.user.news.cards.PreviewNewsCard
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
-fun NewsScreen (component: NewsComponent) {
+fun NewsScreen (
+    modifier: Modifier = Modifier,
+    component: NewsComponent
+) {
     val state by component.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    Row(
+    val openIdNews = state.openNewsId?.let { newsId ->
+        state.newsItems.find { it.newsData.id == newsId }
+    }
+
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
@@ -90,5 +103,27 @@ fun NewsScreen (component: NewsComponent) {
             }
           }
         }
-    }
+
+        if (openIdNews != null) {
+            Dialog(
+                onDismissRequest = {
+                    coroutineScope.launch { component.onIntent(NewsIntent.CloseNews) }
+                },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                PreviewNewsCard(
+                    newsItem = openIdNews,
+                    onToggleRead = { id ->
+                        coroutineScope.launch { component.onIntent(NewsIntent.ToggleRead(id)) }
+                    },
+                    onToggleFavorite = { id ->
+                        coroutineScope.launch { component.onIntent(NewsIntent.ToggleFavorite(id)) }
+                    },
+                    onClose = {
+                        coroutineScope.launch { component.onIntent(NewsIntent.CloseNews) }
+                    }
+                )
+            }
+            }
+        }
 }

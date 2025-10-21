@@ -29,7 +29,10 @@ import com.example.gamesessionapp.features.user.weather.inputs.CityInput
 import com.example.gamesessionapp.features.user.weather.inputs.DegreesInput
 
 @Composable
-fun WeatherScreen(component: WeatherComponent) {
+fun WeatherScreen(
+    modifier: Modifier = Modifier,
+    component: WeatherComponent
+) {
 
     val state by component.state.collectAsState()
 
@@ -95,7 +98,7 @@ fun WeatherScreen(component: WeatherComponent) {
             Spacer(Modifier.height(48.dp))
 
             Row(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
             ) {
                 if(state.buttonsVisible) {
@@ -112,14 +115,15 @@ fun WeatherScreen(component: WeatherComponent) {
 
                 Spacer(Modifier.height(48.dp))
 
-                SearchHistoryCard(
-                    searchHistory = state.searchHistory,
-                    onHistoryItemClick = { weather ->
-                        component.onIntent(WeatherIntent.UpdateCity(weather.city))
-                        component.onIntent(WeatherIntent.UpdateDegrees(weather.degrees))
-                    }
-                )
+
             }
+            SearchHistoryCard(
+                searchHistory = state.searchHistory,
+                onHistoryItemClick = { weather ->
+                    component.onIntent(WeatherIntent.UpdateCity(weather.city))
+                    component.onIntent(WeatherIntent.UpdateDegrees(weather.degrees))
+                }
+            )
         }
     }
 }

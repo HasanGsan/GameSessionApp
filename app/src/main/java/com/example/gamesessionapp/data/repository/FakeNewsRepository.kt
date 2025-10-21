@@ -16,7 +16,7 @@ object FakeNewsRepository : NewsRepository{
             id = "1",
             title = "Тайные улочки Барселоны",
             preview = R.drawable.spanish_image,
-            content = "Lorem ipsum ...",
+            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
             timeCreated = 5,
             postCategory = "Пост",
             tags = "Культура"
@@ -25,7 +25,7 @@ object FakeNewsRepository : NewsRepository{
             id = "2",
             title = "Как проходит рабочий день PM из",
             preview = R.drawable.technocompany_image,
-            content = "Lorem ipsum ...",
+            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
             timeCreated = 10,
             postCategory = "Эссе",
             tags = "Технологии"
@@ -34,20 +34,20 @@ object FakeNewsRepository : NewsRepository{
             id = "3",
             title = "Как я разрабатывал это приложение",
             preview = R.drawable.technocompany_image,
-            content = "Lorem ipsum ...",
+            content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
             timeCreated = 30,
             postCategory = "Статья",
             tags = "Путешествие"
         )
     )
 
-    private val _newsFlow = MutableStateFlow<List<NewsData>>(emptyList())
+    private val _newsFlow = MutableStateFlow<List<NewsData>>(fakeNews)
     val newsflow: StateFlow<List<NewsData>> = _newsFlow.asStateFlow()
 
-    suspend fun loadNews(){
-        val news = getNews()
-        _newsFlow.value = news
-    }
+//    suspend fun loadNews(){
+//        val news = getNews()
+//        _newsFlow.value = news
+//    }
 
     override suspend fun getNews(): List<NewsData> = _newsFlow.value
 

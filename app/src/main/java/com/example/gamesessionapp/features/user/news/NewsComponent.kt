@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class NewsComponent(
     componentContext: ComponentContext,
@@ -20,7 +21,13 @@ class NewsComponent(
     private val _state = MutableStateFlow(NewsState())
     val state : StateFlow<NewsState> = _state
 
-    suspend fun onIntent(intent: NewsIntent) {
+    init {
+        coroutineScope.launch {
+            onIntent(NewsIntent.LoadNews)
+        }
+    }
+
+     suspend fun onIntent(intent: NewsIntent) {
         when (intent) {
             is NewsIntent.LoadNews -> loadNews()
             is NewsIntent.ToggleRead -> toggleRead(intent.newsId)
@@ -69,3 +76,4 @@ class NewsComponent(
         }
     }
 }
+

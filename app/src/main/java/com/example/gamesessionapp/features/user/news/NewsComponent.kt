@@ -3,6 +3,7 @@ package com.example.gamesessionapp.features.user.news
 import com.arkivanov.decompose.ComponentContext
 import com.example.gamesessionapp.data.repository.FakeNewsRepository
 import com.example.gamesessionapp.data.repository.NewsRepository
+import com.example.gamesessionapp.data.repository.room.RoomNewsRepository
 import com.example.gamesessionapp.data.uiState.items.NewsItemUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -10,10 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NewsComponent(
     componentContext: ComponentContext,
-    private val repository: NewsRepository,
+    private val repository: RoomNewsRepository,
 ) : ComponentContext by componentContext {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -23,6 +25,9 @@ class NewsComponent(
 
     init {
         coroutineScope.launch {
+            withContext(Dispatchers.IO) {
+                repository.loadNews()
+            }
             onIntent(NewsIntent.LoadNews)
         }
     }
@@ -67,13 +72,15 @@ class NewsComponent(
     }
 
     private suspend fun toggleFavorite(newsId: String) {
-        repository.addFavorite(newsId)
-        _state.update { state ->
-            val updated = state.newsItems.map {
-                if (it.newsData.id == newsId) it.copy(isFavorite = !it.isFavorite) else it
-            }
-            state.copy(newsItems = updated)
+        val isCurrentFavorite = repository.isFavorite(newsId)
+
+        if(isCurrentFavorite) repository.removeFavorite(newsId) else repository.addFavorite(newsId)
+
+        val updated = _state.value.newsItems.map {
+            if(it.newsData.id == newsId) it.copy(isFavorite = !isCurrentFavorite) else it
         }
+
+        _state.update { it.copy(newsItems = updated) }
     }
 }
 

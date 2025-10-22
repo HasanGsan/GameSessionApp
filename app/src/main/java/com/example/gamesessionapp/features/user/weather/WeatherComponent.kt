@@ -31,6 +31,7 @@ class WeatherComponent(
             }
 
             is WeatherIntent.UpdateDegrees -> {
+                val filteredDegrees = filterDegreesInput(intent.degrees)
                 _state.update { it.copy(degrees = intent.degrees) }
                 updateFormValidity()
             }
@@ -93,9 +94,43 @@ class WeatherComponent(
 
     }
 
+    private fun filterDegreesInput(input: String): String {
+        if(input.isEmpty()) return ""
+
+        val clearInput = input.replace("[^0-9+-]".toRegex(), "")
+
+        val hasPlus = clearInput.contains("+")
+        val hasMinus = clearInput.contains("-")
+
+        if(hasPlus && hasMinus){
+            val lastPlusIndex = clearInput.lastIndexOf("+")
+            val lastMinusIndex = clearInput.lastIndexOf("-")
+
+            return if(lastMinusIndex > lastPlusIndex) {
+                val numbersOnly = clearInput.replace("[+-]".toRegex(), "")
+                "-$numbersOnly"
+            } else {
+                val numbersOnly = clearInput.replace("[+-]".toRegex(), "")
+                "+$numbersOnly"
+            }
+        }
+
+        val hasSignMiddle = clearInput.length > 1 &&
+                clearInput.contains(Regex(".*[+-].*")) &&
+                !clearInput.startsWith("+") &&
+                !clearInput.startsWith("-")
+
+        if(hasSignMiddle) {
+            val sign = if(clearInput.contains("-")) "-" else "+"
+            val numbersOnly = clearInput.replace("[+-]".toRegex(), "")
+            return "$sign$numbersOnly"
+        }
+        return clearInput
+    }
+
     private fun updateFormValidity() {
         val cityValid = _state.value.city.isNotEmpty()
-        val degreesValid = _state.value.degrees.isNotEmpty()
+        val degreesValid = _state.value.degrees.isNotEmpty() && _state.value.degrees.matches("^[-+]?\\d+$".toRegex())
         _state.update { it.copy(isFormValid = cityValid && degreesValid) }
     }
 }

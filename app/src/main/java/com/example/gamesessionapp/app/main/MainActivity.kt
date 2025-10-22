@@ -9,6 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.arkivanov.decompose.DefaultComponentContext
@@ -19,10 +20,13 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.statekeeper.StateKeeper
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import com.example.gamesessionapp.app.MainApp
+import com.example.gamesessionapp.core.database.newsData.DatabaseProvider
 import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.DefaultRootComponent
 import com.example.gamesessionapp.core.theme.GameSessionAppTheme
+import com.example.gamesessionapp.data.local.dao.NewsStatusDao
 import com.example.gamesessionapp.data.repository.FakeNewsRepository
+import com.example.gamesessionapp.data.repository.room.RoomNewsRepository
 import com.example.gamesessionapp.features.user.weather.WeatherComponent
 import com.example.gamesessionapp.features.user.news.NewsComponent
 import com.example.gamesessionapp.features.user.favorites.FavoriteComponent
@@ -46,6 +50,7 @@ class MainActivity : ComponentActivity() {
 private fun rememberRootComponent() : RootComponent {
 
     val lifecycle = remember { LifecycleRegistry() }
+    val context = LocalContext.current
 
 
     val componentContext = remember {
@@ -56,7 +61,14 @@ private fun rememberRootComponent() : RootComponent {
         )
     }
 
-    val newsRepository = remember { FakeNewsRepository }
+    val newsRepository = remember {
+        val database = DatabaseProvider.getDatabase(context)
+        val dao = database.newsStatusDao()
+        RoomNewsRepository(
+            newsStatusDao = dao,
+            fakeNewsRepository = FakeNewsRepository
+        )
+    }
 
     return remember(componentContext) {
         DefaultRootComponent(

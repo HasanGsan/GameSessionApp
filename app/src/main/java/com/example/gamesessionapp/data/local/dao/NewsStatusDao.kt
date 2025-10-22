@@ -15,24 +15,24 @@ interface NewsStatusDao {
     fun getAllFavorites() : Flow<List<FavoriteEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addFavorite(favorite: FavoriteEntity)
+    fun addFavorite(favorite: FavoriteEntity)
 
     @Query("DELETE FROM favorites_posts WHERE newsId = :newsId")
-    suspend fun removeFavorite(newsId: String)
+    fun removeFavorite(newsId: String)
 
     @Query("SELECT COUNT(*) FROM favorites_posts WHERE newsId = :newsId")
-    suspend fun isFavorite(newsId: String) : Int
+    fun isFavorite(newsId: String) : Int
 
     @Query("SELECT * FROM read_posts")
     fun getAllReadPosts() : Flow<List<ReadPostEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addReadPost(readPost: ReadPostEntity)
+    fun addReadPost(readPost: ReadPostEntity)
 
     @Query("DELETE FROM read_posts WHERE newsId = :newsId")
-    suspend fun removeReadPost(newsId: String)
+    fun removeReadPost(newsId: String)
 
     @Query("SELECT COUNT(*) FROM read_posts WHERE newsId = :newsId")
-    suspend fun isRead(newsId: String) : Int
+    fun isRead(newsId: String) : Int
 
 }

@@ -13,6 +13,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import com.example.gamesessionapp.app.MainApp
 import com.example.gamesessionapp.core.navigation.AdminRootComponent
+import com.example.gamesessionapp.core.navigation.DefaultAdminRootComponent
 import com.example.gamesessionapp.data.models.newsData.DatabaseProvider
 import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.DefaultRootComponent
@@ -22,7 +23,8 @@ import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
 import com.example.gamesessionapp.data.repository.room.auth.AppDatabase
 import com.example.gamesessionapp.data.repository.room.news.RoomNewsRepository
 import com.example.gamesessionapp.data.repository.user.UserRepository
-import com.example.gamesessionapp.features.admin.AdminComponent
+import com.example.gamesessionapp.features.admin.management.AdminManagementComponent
+import com.example.gamesessionapp.features.admin.sessions.AdminSessionsComponent
 import com.example.gamesessionapp.features.auth.AuthComponent
 import com.example.gamesessionapp.features.splash.SplashComponent
 import com.example.gamesessionapp.features.user.weather.WeatherComponent
@@ -91,7 +93,15 @@ private fun rememberRootComponent() : RootComponent {
                )
             },
             adminComponent = { childContext ->
-                object : AdminRootComponent {}
+                DefaultAdminRootComponent(
+                    componentContext = childContext,
+                    userManagementComponent = { managementChildContext ->
+                        AdminManagementComponent(managementChildContext)
+                    },
+                    userSessionsComponent = { sessionsChildContext ->
+                        AdminSessionsComponent(sessionsChildContext)
+                    }
+                )
             },
             userRootComponent = { childContext ->
                 DefaultUserRootComponent(

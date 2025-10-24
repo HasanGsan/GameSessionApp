@@ -8,11 +8,13 @@ import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
-import com.example.gamesessionapp.app.bottomNavBar.BottomNavigationBar
+import com.example.gamesessionapp.app.bottomNavBar.BottomNavigationBarAdmin
+import com.example.gamesessionapp.app.bottomNavBar.BottomNavigationBarUser
 import com.example.gamesessionapp.core.navigation.AdminRootComponent
 import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.UserRootComponent
-import com.example.gamesessionapp.features.admin.dashboard.AdminDashboardScreen
+import com.example.gamesessionapp.features.admin.management.AdminManagementScreen
+import com.example.gamesessionapp.features.admin.sessions.AdminSessionsScreen
 import com.example.gamesessionapp.features.auth.AuthScreen
 import com.example.gamesessionapp.features.splash.SplashScreen
 import com.example.gamesessionapp.features.user.favorites.FavoriteScreen
@@ -48,7 +50,7 @@ fun MainApp(
 fun UserApp(component: UserRootComponent) {
     Scaffold(
         bottomBar = {
-            BottomNavigationBar(userRootComponent = component)
+            BottomNavigationBarUser(userRootComponent = component)
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
@@ -68,5 +70,21 @@ fun UserApp(component: UserRootComponent) {
 
 @Composable
 fun AdminApp(component: AdminRootComponent){
-    AdminDashboardScreen(component = component)
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBarAdmin(adminRootComponent = component)
+        }
+    ) { paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues)) {
+            Children(
+                stack = component.childStack,
+                animation = stackAnimation(slide())
+            ) { child ->
+                when (val instance = child.instance) {
+                    is AdminRootComponent.Child.UserManagementChild -> AdminManagementScreen(component = instance.component)
+                    is AdminRootComponent.Child.UserSessionsChild -> AdminSessionsScreen(component = instance.component)
+                }
+            }
+        }
+    }
 }

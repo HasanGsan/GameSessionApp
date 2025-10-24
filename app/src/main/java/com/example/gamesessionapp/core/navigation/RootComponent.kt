@@ -11,7 +11,6 @@ import com.example.gamesessionapp.features.user.favorites.FavoriteComponent
 import com.example.gamesessionapp.features.user.news.NewsComponent
 import com.example.gamesessionapp.features.user.weather.WeatherComponent
 import android.os.Parcelable
-import com.example.gamesessionapp.features.admin.AdminComponent
 import com.example.gamesessionapp.features.auth.AuthComponent
 import com.example.gamesessionapp.features.splash.SplashComponent
 import kotlinx.parcelize.Parcelize

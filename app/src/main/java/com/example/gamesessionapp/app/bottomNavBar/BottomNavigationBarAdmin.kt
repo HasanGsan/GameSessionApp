@@ -5,16 +5,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
@@ -22,22 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.example.gamesessionapp.R
-import com.example.gamesessionapp.core.navigation.RootComponent
+import com.example.gamesessionapp.core.navigation.AdminRootComponent
 import com.example.gamesessionapp.core.navigation.UserRootComponent
 import com.example.gamesessionapp.data.models.navigationData.NavItem
 
 @Composable
-fun BottomNavigationBar(
+fun BottomNavigationBarAdmin(
     modifier: Modifier = Modifier,
-    userRootComponent: UserRootComponent
+    adminRootComponent: AdminRootComponent
 ) {
-    val childStack by userRootComponent.childStack.subscribeAsState()
+    val childStack by adminRootComponent.childStack.subscribeAsState()
     val activeChild = childStack.active.instance
 
     NavigationBar(
@@ -46,22 +40,16 @@ fun BottomNavigationBar(
     ) {
         val items = listOf(
             NavItem(
-                selected = activeChild is UserRootComponent.Child.WeatherChild,
-                onClick = { userRootComponent.navigateToWeather() },
-                iconRes = R.drawable.weather_navigation_icon,
-                label = "Погода"
+                selected = activeChild is AdminRootComponent.Child.UserManagementChild,
+                onClick = { adminRootComponent.navigateToUserManagement() },
+                iconRes = R.drawable.people_icon,
+                label = "Пользователи"
             ),
             NavItem(
-                selected = activeChild is UserRootComponent.Child.NewsChild,
-                onClick = { userRootComponent.navigateToNews() },
-                iconRes = R.drawable.news_navigation_icon,
-                label = "Новости"
-            ),
-            NavItem(
-                selected = activeChild is UserRootComponent.Child.FavoriteChild,
-                onClick = { userRootComponent.navigateToFavorite() },
-                iconRes = R.drawable.favorite_navigation_icon,
-                label = "Избранное"
+                selected = activeChild is AdminRootComponent.Child.UserSessionsChild,
+                onClick = { adminRootComponent.navigateToUserSessions() },
+                iconRes = R.drawable.time_icon,
+                label = "Сессии"
             )
         )
 

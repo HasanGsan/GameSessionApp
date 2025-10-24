@@ -131,7 +131,7 @@ fun favoriteCard(
             ) {
                 Icon(
                     painter = painterResource(
-                        id = if (newsItem.isFavorite) R.drawable.favorite_black_icon else R.drawable.favorite_border_icon
+                        id = if (newsItem.isFavorite) R.drawable.favorite_border_icon else R.drawable.favorite_navigation_icon
                     ),
                     tint = Color.White,
                     contentDescription = "Добавить в избранное",

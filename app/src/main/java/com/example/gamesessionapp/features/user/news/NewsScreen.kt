@@ -30,7 +30,6 @@ import com.example.gamesessionapp.features.user.news.cards.NewsCard
 import com.example.gamesessionapp.features.user.news.cards.PreviewNewsCard
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun NewsScreen (
     modifier: Modifier = Modifier,

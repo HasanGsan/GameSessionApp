@@ -29,14 +29,15 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.example.gamesessionapp.R
 import com.example.gamesessionapp.core.navigation.RootComponent
+import com.example.gamesessionapp.core.navigation.UserRootComponent
 import com.example.gamesessionapp.data.models.navigationData.NavItem
 
 @Composable
 fun BottomNavigationBar(
     modifier: Modifier = Modifier,
-    rootComponent: RootComponent
+    userRootComponent: UserRootComponent
 ) {
-    val childStack by rootComponent.childStack.subscribeAsState()
+    val childStack by userRootComponent.childStack.subscribeAsState()
     val activeChild = childStack.active.instance
 
     NavigationBar(
@@ -45,20 +46,20 @@ fun BottomNavigationBar(
     ) {
         val items = listOf(
             NavItem(
-                selected = activeChild is RootComponent.Child.WeatherChild,
-                onClick = { rootComponent.navigateToWeather() },
+                selected = activeChild is UserRootComponent.Child.WeatherChild,
+                onClick = { userRootComponent.navigateToWeather() },
                 iconRes = R.drawable.weather_navigation_icon,
                 label = "Погода"
             ),
             NavItem(
-                selected = activeChild is RootComponent.Child.NewsChild,
-                onClick = { rootComponent.navigateToNews() },
+                selected = activeChild is UserRootComponent.Child.NewsChild,
+                onClick = { userRootComponent.navigateToNews() },
                 iconRes = R.drawable.news_navigation_icon,
                 label = "Новости"
             ),
             NavItem(
-                selected = activeChild is RootComponent.Child.FavoriteChild,
-                onClick = { rootComponent.navigateToFavorite() },
+                selected = activeChild is UserRootComponent.Child.FavoriteChild,
+                onClick = { userRootComponent.navigateToFavorite() },
                 iconRes = R.drawable.favorite_navigation_icon,
                 label = "Избранное"
             )

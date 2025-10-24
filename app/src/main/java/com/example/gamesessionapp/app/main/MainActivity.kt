@@ -1,32 +1,30 @@
 package com.example.gamesessionapp.app.main
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
-import com.arkivanov.essenty.backhandler.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.arkivanov.decompose.DefaultComponentContext
-import com.arkivanov.decompose.defaultComponentContext
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.instancekeeper.InstanceKeeperDispatcher
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import com.arkivanov.essenty.statekeeper.StateKeeper
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import com.example.gamesessionapp.app.MainApp
-import com.example.gamesessionapp.core.database.newsData.DatabaseProvider
+import com.example.gamesessionapp.core.navigation.AdminRootComponent
+import com.example.gamesessionapp.data.models.newsData.DatabaseProvider
 import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.DefaultRootComponent
+import com.example.gamesessionapp.core.navigation.DefaultUserRootComponent
 import com.example.gamesessionapp.core.theme.GameSessionAppTheme
-import com.example.gamesessionapp.data.local.dao.NewsStatusDao
-import com.example.gamesessionapp.data.repository.FakeNewsRepository
-import com.example.gamesessionapp.data.repository.room.RoomNewsRepository
+import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
+import com.example.gamesessionapp.data.repository.room.auth.AppDatabase
+import com.example.gamesessionapp.data.repository.room.news.RoomNewsRepository
+import com.example.gamesessionapp.data.repository.user.UserRepository
+import com.example.gamesessionapp.features.admin.AdminComponent
+import com.example.gamesessionapp.features.auth.AuthComponent
+import com.example.gamesessionapp.features.splash.SplashComponent
 import com.example.gamesessionapp.features.user.weather.WeatherComponent
 import com.example.gamesessionapp.features.user.news.NewsComponent
 import com.example.gamesessionapp.features.user.favorites.FavoriteComponent
@@ -70,24 +68,49 @@ private fun rememberRootComponent() : RootComponent {
         )
     }
 
+    val userRepository = remember {
+        val database = AppDatabase.getDatabase(context)
+        val userDao = database.userDao()
+        UserRepository(userDao)
+    }
+
     return remember(componentContext) {
         DefaultRootComponent(
             componentContext = componentContext,
-            weatherComponent = { childContext ->
-                WeatherComponent(
-                    componentContext = childContext
+            splashComponent = { childContext, onFinished ->
+                SplashComponent(
+                    componentContext = childContext,
+                    onFinished = onFinished
                 )
             },
-            newsComponent = { childContext ->
-                NewsComponent(
-                    componentContext = childContext,
-                    repository = newsRepository
-                )
+            authComponent = { childContext, onLoginSuccess ->
+               AuthComponent(
+                   componentContext = childContext,
+                   repository = userRepository,
+                   onLoginSuccess = onLoginSuccess
+               )
             },
-            favoriteComponent = { childContext ->
-                FavoriteComponent(
+            adminComponent = { childContext ->
+                object : AdminRootComponent {}
+            },
+            userRootComponent = { childContext ->
+                DefaultUserRootComponent(
                     componentContext = childContext,
-                    repository = newsRepository
+                    weatherComponent = { weatherChildContext ->
+                        WeatherComponent(componentContext = weatherChildContext)
+                    },
+                    newsComponent = { newsChildContext ->
+                        NewsComponent(
+                            componentContext = newsChildContext,
+                            repository = newsRepository
+                        )
+                    },
+                    favoriteComponent = { favoriteChildContext ->
+                        FavoriteComponent(
+                            componentContext = favoriteChildContext,
+                            repository = newsRepository
+                        )
+                    }
                 )
             }
         )

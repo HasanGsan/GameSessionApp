@@ -1,4 +1,4 @@
-package com.example.gamesessionapp.data.local.entity
+package com.example.gamesessionapp.data.local.entity.favorite
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

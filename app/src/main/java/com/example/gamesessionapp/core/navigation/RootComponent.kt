@@ -11,40 +11,50 @@ import com.example.gamesessionapp.features.user.favorites.FavoriteComponent
 import com.example.gamesessionapp.features.user.news.NewsComponent
 import com.example.gamesessionapp.features.user.weather.WeatherComponent
 import android.os.Parcelable
+import com.example.gamesessionapp.features.admin.AdminComponent
+import com.example.gamesessionapp.features.auth.AuthComponent
+import com.example.gamesessionapp.features.splash.SplashComponent
 import kotlinx.parcelize.Parcelize
 
 interface RootComponent {
     val childStack: Value<ChildStack<*, Child>>
 
-    fun navigateToWeather()
-    fun navigateToNews()
-    fun navigateToFavorite()
-    fun navigateToBack()
+    fun navigateToSplash()
+    fun navigateToAuth()
+    fun navigateToAdmin()
+    fun navigateToUser()
 
     sealed class Child {
-        data class WeatherChild(val component: WeatherComponent) : Child()
-        data class NewsChild(val component: NewsComponent) : Child()
-        data class FavoriteChild(val component: FavoriteComponent) : Child()
+        data class SplashChild(val component: SplashComponent) : Child()
+        data class AuthChild(val component: AuthComponent) : Child()
+        data class UserChild(val component: UserRootComponent) : Child()
+        data class AdminChild(val component: AdminRootComponent) : Child()
     }
 }
 
 class DefaultRootComponent(
     componentContext: ComponentContext,
-    private val weatherComponent: (ComponentContext) -> WeatherComponent,
-    private val newsComponent: (ComponentContext) -> NewsComponent,
-    private val favoriteComponent: (ComponentContext) -> FavoriteComponent,
+    private val splashComponent: (ComponentContext, onFinished: () -> Unit) -> SplashComponent,
+    private val authComponent: (ComponentContext, onLoginSuccess: (Boolean) -> Unit) -> AuthComponent,
+    private val adminComponent: (ComponentContext) -> AdminRootComponent,
+    private val userRootComponent: (ComponentContext) -> UserRootComponent
 ) : RootComponent, ComponentContext by componentContext {
 
     @Parcelize
     private sealed class Config : Parcelable {
-        @Parcelize
-        object Weather: Config()
 
         @Parcelize
-        object News: Config()
+        object Splash : Config()
 
         @Parcelize
-        object Favorite: Config()
+        object Auth : Config()
+
+        @Parcelize
+        object User: Config()
+
+        @Parcelize
+        object Admin : Config()
+
     }
 
     private val navigation = StackNavigation<Config>()
@@ -52,35 +62,34 @@ class DefaultRootComponent(
     override val childStack: Value<ChildStack<*, RootComponent.Child>> =
         childStack(
             source = navigation,
-            initialConfiguration = Config.Weather,
+            initialConfiguration = Config.Splash,
             handleBackButton = true,
             childFactory = ::createChild
         )
 
     private fun createChild(config: Config, componentContext: ComponentContext): RootComponent.Child {
         return when (config) {
-            is Config.Weather -> RootComponent.Child.WeatherChild(weatherComponent(componentContext))
-            is Config.News -> RootComponent.Child.NewsChild(newsComponent(componentContext))
-            is Config.Favorite -> RootComponent.Child.FavoriteChild(favoriteComponent(componentContext))
+            is Config.Splash -> RootComponent.Child.SplashChild(splashComponent(componentContext) { navigateToAuth() })
+            is Config.Auth -> RootComponent.Child.AuthChild(authComponent(componentContext) { isAdmin -> if(isAdmin) navigateToAdmin() else navigateToUser() })
+            is Config.User -> RootComponent.Child.UserChild(userRootComponent(componentContext))
+            is Config.Admin -> RootComponent.Child.AdminChild(adminComponent(componentContext))
         }
     }
 
-    override fun navigateToWeather() {
-        navigation.replaceCurrent(Config.Weather)
+    override fun navigateToSplash() {
+        navigation.replaceCurrent(Config.Splash)
     }
 
-    override fun navigateToNews() {
-        navigation.replaceCurrent(Config.News)
+    override fun navigateToAuth() {
+        navigation.replaceCurrent(Config.Auth)
     }
 
-    override fun navigateToFavorite() {
-        navigation.replaceCurrent(Config.Favorite)
+    override fun navigateToAdmin() {
+        navigation.replaceCurrent(Config.Admin)
     }
 
-    override fun navigateToBack() {
-        navigation.pop()
+    override fun navigateToUser() {
+        navigation.replaceCurrent(Config.User)
     }
-
-
 
 }

@@ -1,4 +1,4 @@
-package com.example.gamesessionapp.core.database.newsData
+package com.example.gamesessionapp.data.models.newsData
 
 import android.content.Context
 import androidx.room.Room

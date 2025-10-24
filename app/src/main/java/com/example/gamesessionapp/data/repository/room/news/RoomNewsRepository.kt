@@ -1,12 +1,11 @@
-package com.example.gamesessionapp.data.repository.room
+package com.example.gamesessionapp.data.repository.room.news
 
-import com.example.gamesessionapp.data.local.dao.NewsStatusDao
-import com.example.gamesessionapp.data.local.entity.FavoriteEntity
-import com.example.gamesessionapp.data.local.entity.ReadPostEntity
+import com.example.gamesessionapp.data.local.dao.news.NewsStatusDao
+import com.example.gamesessionapp.data.local.entity.favorite.FavoriteEntity
+import com.example.gamesessionapp.data.local.entity.favorite.ReadPostEntity
 import com.example.gamesessionapp.data.models.NewsData
-import com.example.gamesessionapp.data.repository.FakeNewsRepository
-import com.example.gamesessionapp.data.repository.NewsRepository
-import com.example.gamesessionapp.data.uiState.items.NewsItemUiState
+import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
+import com.example.gamesessionapp.data.repository.news.NewsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -49,29 +48,31 @@ class RoomNewsRepository(
     }
 
     override suspend fun getFavorites(): List<NewsData> {
-        val favoriteIds = withContext(Dispatchers.IO){ newsStatusDao.getAllFavorites().first().map { it.newsId } }
+        val favoriteIds = withContext(Dispatchers.IO) {
+            newsStatusDao.getAllFavorites().first().map { it.newsId }
+        }
         return _newsFlow.value.filter { it.id in favoriteIds }
     }
 
     override suspend fun toggleFavorite(newsId: String) {
-        val isFav =  withContext(Dispatchers.IO){ newsStatusDao.isFavorite(newsId) > 0 }
-        if (isFav) withContext(Dispatchers.IO){ newsStatusDao.removeFavorite(newsId) }
-        else withContext(Dispatchers.IO){ newsStatusDao.addFavorite(FavoriteEntity(newsId))}
+        val isFav = withContext(Dispatchers.IO) { newsStatusDao.isFavorite(newsId) > 0 }
+        if (isFav) withContext(Dispatchers.IO) { newsStatusDao.removeFavorite(newsId) }
+        else withContext(Dispatchers.IO) { newsStatusDao.addFavorite(FavoriteEntity(newsId)) }
         refreshNews(newsId)
     }
 
     override suspend fun isFavorite(newsId: String): Boolean =
-        withContext(Dispatchers.IO){ newsStatusDao.isFavorite(newsId) > 0 }
+        withContext(Dispatchers.IO) { newsStatusDao.isFavorite(newsId) > 0 }
 
     override suspend fun asRead(newsId: String) {
-        val isNowRead = withContext(Dispatchers.IO){ newsStatusDao.isRead(newsId) > 0 }
-        if (isNowRead) withContext(Dispatchers.IO){ newsStatusDao.removeReadPost(newsId) }
-        else withContext(Dispatchers.IO){ newsStatusDao.addReadPost(ReadPostEntity(newsId)) }
+        val isNowRead = withContext(Dispatchers.IO) { newsStatusDao.isRead(newsId) > 0 }
+        if (isNowRead) withContext(Dispatchers.IO) { newsStatusDao.removeReadPost(newsId) }
+        else withContext(Dispatchers.IO) { newsStatusDao.addReadPost(ReadPostEntity(newsId)) }
         refreshNews(newsId)
     }
 
     override suspend fun isRead(newsId: String): Boolean =
-        withContext(Dispatchers.IO){ newsStatusDao.isRead(newsId) > 0 }
+        withContext(Dispatchers.IO) { newsStatusDao.isRead(newsId) > 0 }
 
     private fun refreshNews(newsId: String) {
         _newsFlow.value = _newsFlow.value.map { news ->

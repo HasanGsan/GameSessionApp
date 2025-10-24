@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("kapt")
     id ("kotlin-parcelize")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -66,6 +66,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation("com.google.android.material:material:1.13.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }
 
 configurations.all {

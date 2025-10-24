@@ -1,4 +1,4 @@
-package com.example.gamesessionapp.data.repository
+package com.example.gamesessionapp.data.repository.news
 
 import com.example.gamesessionapp.data.models.NewsData
 

@@ -1,4 +1,4 @@
-package com.example.gamesessionapp.data.repository
+package com.example.gamesessionapp.data.repository.news
 
 import com.example.gamesessionapp.R
 import com.example.gamesessionapp.data.models.NewsData
@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-object FakeNewsRepository : NewsRepository{
+object FakeNewsRepository : NewsRepository {
 
     private val readIds = mutableSetOf<String>()
     private val favoriteIds = mutableSetOf<String>()

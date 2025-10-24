@@ -2,7 +2,7 @@ package com.example.gamesessionapp.features.user.favorites
 
 
 import com.arkivanov.decompose.ComponentContext
-import com.example.gamesessionapp.data.repository.NewsRepository
+import com.example.gamesessionapp.data.repository.news.NewsRepository
 import com.example.gamesessionapp.data.uiState.items.NewsItemUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -58,6 +58,7 @@ class FavoriteComponent(
 
     private fun selectTag(tag: String) {
         _state.value = _state.value.copy(selectedTag = tag)
+        updateFavorites()
     }
 
     private fun updateFavorites() {

@@ -7,6 +7,7 @@ import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
+import com.example.gamesessionapp.data.repository.user.RoomUserRepository
 import com.example.gamesessionapp.features.admin.management.AdminManagementComponent
 import com.example.gamesessionapp.features.admin.sessions.AdminSessionsComponent
 import kotlinx.parcelize.Parcelize
@@ -25,7 +26,8 @@ interface AdminRootComponent {
 
 class DefaultAdminRootComponent(
     componentContext: ComponentContext,
-    private val userManagementComponent: (ComponentContext) -> AdminManagementComponent,
+    private val roomUserRepository: RoomUserRepository,
+    private val userManagementComponent: (ComponentContext, RoomUserRepository) -> AdminManagementComponent,
     private val userSessionsComponent: (ComponentContext) -> AdminSessionsComponent
 ) : AdminRootComponent, ComponentContext by componentContext {
 
@@ -50,7 +52,8 @@ class DefaultAdminRootComponent(
 
     private fun createChild(config: Config, componentContext: ComponentContext) : AdminRootComponent.Child {
         return when (config){
-            is Config.UserManagement -> AdminRootComponent.Child.UserManagementChild(userManagementComponent(componentContext))
+            is Config.UserManagement -> AdminRootComponent.Child.UserManagementChild(userManagementComponent(componentContext,
+                roomUserRepository))
             is Config.UserSessions -> AdminRootComponent.Child.UserSessionsChild(userSessionsComponent(componentContext))
         }
     }

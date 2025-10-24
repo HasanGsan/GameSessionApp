@@ -12,7 +12,6 @@ import com.arkivanov.essenty.instancekeeper.InstanceKeeperDispatcher
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import com.example.gamesessionapp.app.MainApp
-import com.example.gamesessionapp.core.navigation.AdminRootComponent
 import com.example.gamesessionapp.core.navigation.DefaultAdminRootComponent
 import com.example.gamesessionapp.data.models.newsData.DatabaseProvider
 import com.example.gamesessionapp.core.navigation.RootComponent
@@ -22,7 +21,7 @@ import com.example.gamesessionapp.core.theme.GameSessionAppTheme
 import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
 import com.example.gamesessionapp.data.repository.room.auth.AppDatabase
 import com.example.gamesessionapp.data.repository.room.news.RoomNewsRepository
-import com.example.gamesessionapp.data.repository.user.UserRepository
+import com.example.gamesessionapp.data.repository.user.RoomUserRepository
 import com.example.gamesessionapp.features.admin.management.AdminManagementComponent
 import com.example.gamesessionapp.features.admin.sessions.AdminSessionsComponent
 import com.example.gamesessionapp.features.auth.AuthComponent
@@ -73,7 +72,7 @@ private fun rememberRootComponent() : RootComponent {
     val userRepository = remember {
         val database = AppDatabase.getDatabase(context)
         val userDao = database.userDao()
-        UserRepository(userDao)
+        RoomUserRepository(userDao)
     }
 
     return remember(componentContext) {
@@ -95,8 +94,9 @@ private fun rememberRootComponent() : RootComponent {
             adminComponent = { childContext ->
                 DefaultAdminRootComponent(
                     componentContext = childContext,
-                    userManagementComponent = { managementChildContext ->
-                        AdminManagementComponent(managementChildContext)
+                    roomUserRepository = userRepository,
+                    userManagementComponent = { managementChildContext, userRepo ->
+                        AdminManagementComponent(managementChildContext, roomUserRepository = userRepo)
                     },
                     userSessionsComponent = { sessionsChildContext ->
                         AdminSessionsComponent(sessionsChildContext)

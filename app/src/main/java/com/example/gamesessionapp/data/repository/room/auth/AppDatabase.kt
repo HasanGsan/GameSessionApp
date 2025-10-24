@@ -9,7 +9,7 @@ import com.example.gamesessionapp.data.local.dao.user.UserDao
 import com.example.gamesessionapp.data.local.entity.user.UserEntity
 import com.example.gamesessionapp.data.local.roomConverter.UserRoleConverter
 
-@Database(entities = [UserEntity::class], version = 1)
+@Database(entities = [UserEntity::class], version = 2)
 @TypeConverters(UserRoleConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

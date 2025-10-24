@@ -3,18 +3,17 @@ package com.example.gamesessionapp.features.auth
 import com.arkivanov.decompose.ComponentContext
 import com.example.gamesessionapp.data.local.entity.user.UserEntity
 import com.example.gamesessionapp.data.local.entity.user.UserRole
-import com.example.gamesessionapp.data.repository.user.UserRepository
+import com.example.gamesessionapp.data.repository.user.RoomUserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 class AuthComponent(
     componentContext: ComponentContext,
-    private val repository: UserRepository,
+    private val repository: RoomUserRepository,
     private val onLoginSuccess: (Boolean) -> Unit
 ) : ComponentContext by componentContext {
 

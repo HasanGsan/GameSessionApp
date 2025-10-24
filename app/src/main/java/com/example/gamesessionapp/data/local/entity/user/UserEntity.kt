@@ -1,6 +1,5 @@
 package com.example.gamesessionapp.data.local.entity.user
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -8,7 +7,9 @@ import androidx.room.PrimaryKey
 data class UserEntity (
     @PrimaryKey val login: String,
     val password: String,
-    val role: UserRole
+    val role: UserRole,
+    val isBlocked: Boolean = false,
+    val isOnline: Boolean = false
 )
 
 enum class UserRole{

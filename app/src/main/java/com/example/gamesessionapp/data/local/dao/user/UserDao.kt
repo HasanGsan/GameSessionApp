@@ -24,7 +24,7 @@ interface UserDao {
     @Query("SELECT COUNT(*) FROM users")
     fun getUserCount(): Int
 
-    @Query("UPDATE users SET isBlocked = :isBlocked WHERE login = :login")
+    @Query("UPDATE users SET isBlocked = :isBlocked, isOnline = CASE WHEN :isBlocked THEN false ELSE isOnline END WHERE login = :login")
     fun updateBlockStatus(login: String, isBlocked: Boolean)
 
     @Query("UPDATE users SET isOnline = :isOnline WHERE login = :login")

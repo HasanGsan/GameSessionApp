@@ -21,7 +21,7 @@ interface RootComponent {
     fun navigateToSplash()
     fun navigateToAuth()
     fun navigateToAdmin()
-    fun navigateToUser()
+    fun navigateToUser(login: String)
 
     sealed class Child {
         data class SplashChild(val component: SplashComponent) : Child()
@@ -34,9 +34,9 @@ interface RootComponent {
 class DefaultRootComponent(
     componentContext: ComponentContext,
     private val splashComponent: (ComponentContext, onFinished: () -> Unit) -> SplashComponent,
-    private val authComponent: (ComponentContext, onLoginSuccess: (Boolean) -> Unit) -> AuthComponent,
+    private val authComponent: (ComponentContext, onLoginSuccess: (String, Boolean) -> Unit) -> AuthComponent,
     private val adminComponent: (ComponentContext) -> AdminRootComponent,
-    private val userRootComponent: (ComponentContext) -> UserRootComponent
+    private val userRootComponent: (ComponentContext, String) -> UserRootComponent
 ) : RootComponent, ComponentContext by componentContext {
 
     @Parcelize
@@ -57,6 +57,7 @@ class DefaultRootComponent(
     }
 
     private val navigation = StackNavigation<Config>()
+    private var currentUserLogin: String = ""
 
     override val childStack: Value<ChildStack<*, RootComponent.Child>> =
         childStack(
@@ -69,8 +70,10 @@ class DefaultRootComponent(
     private fun createChild(config: Config, componentContext: ComponentContext): RootComponent.Child {
         return when (config) {
             is Config.Splash -> RootComponent.Child.SplashChild(splashComponent(componentContext) { navigateToAuth() })
-            is Config.Auth -> RootComponent.Child.AuthChild(authComponent(componentContext) { isAdmin -> if(isAdmin) navigateToAdmin() else navigateToUser() })
-            is Config.User -> RootComponent.Child.UserChild(userRootComponent(componentContext))
+            is Config.Auth -> RootComponent.Child.AuthChild(authComponent(componentContext) { login, isAdmin ->
+                if(isAdmin) navigateToAdmin() else navigateToUser(login)
+            })
+            is Config.User -> RootComponent.Child.UserChild(userRootComponent(componentContext, currentUserLogin))
             is Config.Admin -> RootComponent.Child.AdminChild(adminComponent(componentContext))
         }
     }
@@ -87,7 +90,8 @@ class DefaultRootComponent(
         navigation.replaceCurrent(Config.Admin)
     }
 
-    override fun navigateToUser() {
+    override fun navigateToUser(login: String) {
+        currentUserLogin = login
         navigation.replaceCurrent(Config.User)
     }
 

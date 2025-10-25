@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class AuthComponent(
     componentContext: ComponentContext,
     private val repository: RoomUserRepository,
-    private val onLoginSuccess: (Boolean) -> Unit
+    private val onLoginSuccess: (String, Boolean) -> Unit
 ) : ComponentContext by componentContext {
 
     private val _state = MutableStateFlow(AuthState())
@@ -91,7 +91,7 @@ class AuthComponent(
                 )
 
                 val isAdmin = user.role == UserRole.ADMIN
-                onLoginSuccess(isAdmin)
+                onLoginSuccess(user.login, isAdmin)
 
             } else {
 

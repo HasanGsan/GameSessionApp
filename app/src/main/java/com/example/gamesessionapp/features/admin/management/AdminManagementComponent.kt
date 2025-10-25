@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class AdminManagementComponent(
     componentContext: ComponentContext,
@@ -19,9 +20,13 @@ class AdminManagementComponent(
     private val _state = MutableStateFlow(AdminManagementState())
     val state: StateFlow<AdminManagementState> = _state.asStateFlow()
 
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     init {
+        loadUsers()
+    }
+
+    private fun loadUsers() {
         coroutineScope.launch {
             roomUserRepository.getAllUsers().collect { users ->
                 _state.value = _state.value.copy(users = users)
@@ -43,13 +48,21 @@ class AdminManagementComponent(
 
     private fun blockUser(login: String) {
         coroutineScope.launch {
-            roomUserRepository.updateBlockStatus(login, true)
+            try {
+                roomUserRepository.updateBlockStatus(login, true)
+            } catch (e: kotlin.Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     private fun unblockUser(login: String) {
         coroutineScope.launch {
-            roomUserRepository.updateBlockStatus(login, false)
+            try {
+                roomUserRepository.updateBlockStatus(login, false)
+            } catch (e: kotlin.Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
@@ -97,14 +110,32 @@ class AdminManagementComponent(
     }
 
     private fun submitCreateUser() {
-        val newUser = UserEntity(
-            login = _state.value.newUserLogin,
-            password = _state.value.newUserPassword,
-            role = UserRole.USER
-        )
         coroutineScope.launch {
-            roomUserRepository.addUser(newUser)
-            closeCreateUserDialog()
+            try {
+                val loginExists = roomUserRepository.checkLoginExists(_state.value.newUserLogin)
+
+                if(loginExists) {
+                    _state.value = _state.value.copy(
+                        newUserLoginError = "Пользователь с таким логином уже существует"
+                    )
+                    return@launch
+                }
+
+                val newUser = UserEntity(
+                    login = _state.value.newUserLogin,
+                    password = _state.value.newUserPassword,
+                    role = UserRole.USER,
+                    isBlocked = false,
+                    isOnline = false
+                )
+
+                roomUserRepository.addUser(newUser)
+                closeCreateUserDialog()
+                loadUsers()
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 

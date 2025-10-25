@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.slide
 import com.arkivanov.decompose.extensions.compose.jetpack.stack.animation.stackAnimation
+import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.example.gamesessionapp.app.bottomNavBar.BottomNavigationBarAdmin
 import com.example.gamesessionapp.app.bottomNavBar.BottomNavigationBarUser
 import com.example.gamesessionapp.core.navigation.AdminRootComponent
@@ -15,11 +17,13 @@ import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.UserRootComponent
 import com.example.gamesessionapp.features.admin.management.AdminManagementScreen
 import com.example.gamesessionapp.features.admin.sessions.AdminSessionsScreen
+import com.example.gamesessionapp.features.admin.sessions.component.NoSessionMessage
 import com.example.gamesessionapp.features.auth.AuthScreen
 import com.example.gamesessionapp.features.splash.SplashScreen
 import com.example.gamesessionapp.features.user.favorites.FavoriteScreen
 import com.example.gamesessionapp.features.user.news.NewsScreen
 import com.example.gamesessionapp.features.user.weather.WeatherScreen
+
 
 @Composable
 fun MainApp(
@@ -35,7 +39,7 @@ fun MainApp(
                     is RootComponent.Child.SplashChild -> SplashScreen(component = instance.component)
                     is RootComponent.Child.AuthChild -> AuthScreen(
                         component = instance.component,
-                        onNavigateToUser = { rootComponent.navigateToUser() },
+                        onNavigateToUser = { rootComponent.navigateToUser(instance.component.state.value.login) },
                         onNavigateToAdmin = {rootComponent.navigateToAdmin()}
                     )
                     is RootComponent.Child.UserChild -> UserApp(component = instance.component)
@@ -48,9 +52,16 @@ fun MainApp(
 
 @Composable
 fun UserApp(component: UserRootComponent) {
+    val childStack by component.childStack.subscribeAsState()
+    val currentChild = childStack.active.instance
+
+    val isNoSessionScreen = currentChild is UserRootComponent.Child.NoSessionChild
+
     Scaffold(
         bottomBar = {
-            BottomNavigationBarUser(userRootComponent = component)
+            if(!isNoSessionScreen) {
+                BottomNavigationBarUser(userRootComponent = component)
+            }
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
@@ -62,6 +73,7 @@ fun UserApp(component: UserRootComponent) {
                     is UserRootComponent.Child.WeatherChild -> WeatherScreen(component = instance.component)
                     is UserRootComponent.Child.NewsChild -> NewsScreen(component = instance.component)
                     is UserRootComponent.Child.FavoriteChild -> FavoriteScreen(component = instance.component)
+                    is UserRootComponent.Child.NoSessionChild -> NoSessionMessage(component = instance.component)
                 }
             }
         }

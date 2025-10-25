@@ -13,12 +13,14 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.statekeeper.StateKeeperDispatcher
 import com.example.gamesessionapp.app.MainApp
 import com.example.gamesessionapp.core.navigation.DefaultAdminRootComponent
+import com.example.gamesessionapp.core.navigation.DefaultNoSessionComponent
 import com.example.gamesessionapp.data.models.newsData.DatabaseProvider
 import com.example.gamesessionapp.core.navigation.RootComponent
 import com.example.gamesessionapp.core.navigation.DefaultRootComponent
 import com.example.gamesessionapp.core.navigation.DefaultUserRootComponent
 import com.example.gamesessionapp.core.theme.GameSessionAppTheme
 import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
+import com.example.gamesessionapp.data.repository.room.adminSession.AppSessionDatabase
 import com.example.gamesessionapp.data.repository.room.auth.AppDatabase
 import com.example.gamesessionapp.data.repository.room.news.RoomNewsRepository
 import com.example.gamesessionapp.data.repository.user.RoomUserRepository
@@ -70,9 +72,11 @@ private fun rememberRootComponent() : RootComponent {
     }
 
     val userRepository = remember {
-        val database = AppDatabase.getDatabase(context)
-        val userDao = database.userDao()
-        RoomUserRepository(userDao)
+        val authDatabase = AppDatabase.getDatabase(context)
+        val userDao = authDatabase.userDao()
+        val sessionDatabase = AppSessionDatabase.getDatabase(context)
+        val sessionDao = sessionDatabase.sessionDao()
+        RoomUserRepository(userDao, sessionDao)
     }
 
     return remember(componentContext) {
@@ -99,13 +103,17 @@ private fun rememberRootComponent() : RootComponent {
                         AdminManagementComponent(managementChildContext, roomUserRepository = userRepo)
                     },
                     userSessionsComponent = { sessionsChildContext ->
-                        AdminSessionsComponent(sessionsChildContext)
+                        AdminSessionsComponent(sessionsChildContext, userRepository = userRepository)
                     }
                 )
             },
-            userRootComponent = { childContext ->
-                DefaultUserRootComponent(
+            userRootComponent = { childContext, userLogin ->
+                var userRootComponentRef: DefaultUserRootComponent? = null
+
+                val userRootComponent = DefaultUserRootComponent(
                     componentContext = childContext,
+                    userRepository = userRepository,
+                    userLogin = userLogin,
                     weatherComponent = { weatherChildContext ->
                         WeatherComponent(componentContext = weatherChildContext)
                     },
@@ -120,8 +128,20 @@ private fun rememberRootComponent() : RootComponent {
                             componentContext = favoriteChildContext,
                             repository = newsRepository
                         )
+                    },
+                    noSessionComponent = { noSessionChildContext ->
+                        DefaultNoSessionComponent(
+                            componentContext = noSessionChildContext,
+                            userRepository = userRepository,
+                            userLogin = userLogin,
+                            onSessionAvailable = {
+                                userRootComponentRef?.checkSessionAndNavigate()
+                            }
+                        )
                     }
                 )
+                userRootComponentRef = userRootComponent
+                userRootComponent
             }
         )
     }

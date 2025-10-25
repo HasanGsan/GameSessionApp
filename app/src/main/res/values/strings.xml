@@ -18,4 +18,16 @@
 
     <string name="test_full_lorem_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. \n Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 
+    <string name="title_session_create">Создание сессии</string>
+    <string name="all_user_title">ПОЛЬЗОВАТЕЛИ</string>
+    <string name="title_favorite_text">Избранное</string>
+    <string name="session_title_screen">Сессии</string>
+    <string name="session_not_found_title_screen">Сессии не найдены</string>
+    <string name="date_text">Дата</string>
+    <string name="close_session_user_text">К сожалению, вас пока не добавили к текущей сессии, вернитесь позже.</string>
+    <string name="text_not_users">Нет пользователей</string>
+    <string name="all_user_text">Пользователи</string>
+    <string name="all_user_not_found_text">Пользователи не найдены</string>
+    <string name="title_create_user_text">Создание пользователя</string>
+
 </resources>

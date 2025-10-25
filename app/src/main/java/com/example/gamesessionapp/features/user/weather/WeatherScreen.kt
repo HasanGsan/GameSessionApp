@@ -83,7 +83,6 @@ fun WeatherScreen(
                         },
                         modifier = Modifier
                     )
-
                 }
             } else {
 

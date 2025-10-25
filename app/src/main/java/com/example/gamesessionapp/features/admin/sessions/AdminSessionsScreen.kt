@@ -33,6 +33,8 @@ import com.example.gamesessionapp.features.admin.sessions.cards.SessionListItem
 import com.example.gamesessionapp.features.admin.sessions.createSessionDialog.CreateSessionDialog
 import kotlinx.coroutines.launch
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun AdminSessionsScreen(
@@ -54,7 +56,7 @@ fun AdminSessionsScreen(
             verticalAlignment = Alignment.CenterVertically
         ){
             Text(
-                text = "Сессии",
+                text = stringResource(R.string.session_title_screen),
                 fontSize = 24.sp,
                 color = Color.White
             )
@@ -93,7 +95,7 @@ fun AdminSessionsScreen(
         ) {
             if(state.sessions.isEmpty()) {
                 Text(
-                    text = "Сессии не найдены",
+                    text = stringResource(R.string.session_not_found_title_screen),
                     color = Color.DarkGray,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -105,7 +107,7 @@ fun AdminSessionsScreen(
                         SessionListItem(
                             sessionWithUser = sessionWithUser
                         )
-                        Divider(
+                        HorizontalDivider(
                             color = DarkGray,
                             thickness = 1.dp,
                             modifier = Modifier.fillMaxWidth()
@@ -134,6 +136,5 @@ fun AdminSessionsScreen(
                 )
             }
         }
-
     }
 }

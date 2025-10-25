@@ -1,10 +1,7 @@
 package com.example.gamesessionapp.features.admin.sessions
 
-import android.util.Log.e
 import com.arkivanov.decompose.ComponentContext
 import com.example.gamesessionapp.data.repository.user.RoomUserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -181,9 +178,5 @@ class AdminSessionsComponent(
             sessionDate == today.minusDays(1) -> "ВЧЕРА, $dateString"
             else -> dateString
         }
-
     }
-
-
-
 }

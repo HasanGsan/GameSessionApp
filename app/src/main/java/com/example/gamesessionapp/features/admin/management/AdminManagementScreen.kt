@@ -13,9 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -45,7 +46,6 @@ fun AdminManagementScreen(
     val state by component.state.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,7 +58,7 @@ fun AdminManagementScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Пользователи",
+                text = stringResource(R.string.all_user_text),
                 fontSize = 24.sp,
                 color = Color.White
             )
@@ -97,7 +97,7 @@ fun AdminManagementScreen(
         ) {
             if (state.users.isEmpty()) {
                 Text(
-                    text = "Пользователи не найдены",
+                    text = stringResource(R.string.all_user_not_found_text),
                     color = Color.DarkGray,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -119,7 +119,7 @@ fun AdminManagementScreen(
                                 }
                             }
                         )
-                        Divider(
+                        HorizontalDivider(
                             color = DarkGray,
                             thickness = 1.dp,
                             modifier = Modifier.fillMaxWidth()

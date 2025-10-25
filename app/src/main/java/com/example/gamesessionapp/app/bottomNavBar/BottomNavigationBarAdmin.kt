@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetpack.subscribeAsState
 import com.example.gamesessionapp.R
 import com.example.gamesessionapp.core.navigation.AdminRootComponent
-import com.example.gamesessionapp.core.navigation.UserRootComponent
 import com.example.gamesessionapp.data.models.navigationData.NavItem
 
 @Composable

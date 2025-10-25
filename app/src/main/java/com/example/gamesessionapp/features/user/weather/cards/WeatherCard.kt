@@ -29,7 +29,6 @@ import com.example.gamesessionapp.core.theme.DarkGray
 import com.example.gamesessionapp.core.theme.VeryDarkGray
 import kotlin.text.uppercase
 
-
 @Composable
 fun WeatherCard(
     modifier: Modifier = Modifier,

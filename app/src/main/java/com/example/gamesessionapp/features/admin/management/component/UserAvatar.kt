@@ -64,7 +64,6 @@ private fun getAvatarColor(username: String): Color {
     } else {
         Random.nextInt(colors.size)
     }
-
     return colors[index]
 }
 

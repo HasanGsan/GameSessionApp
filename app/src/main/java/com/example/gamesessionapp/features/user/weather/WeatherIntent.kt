@@ -1,7 +1,6 @@
 package com.example.gamesessionapp.features.user.weather
 
 sealed interface WeatherIntent {
-
     data class UpdateCity(val city: String) : WeatherIntent
     data class UpdateDegrees(val degrees: String) : WeatherIntent
     object GenerateDescription : WeatherIntent
@@ -10,5 +9,4 @@ sealed interface WeatherIntent {
     object ClearAndCreateNewRequest : WeatherIntent
     object ShowInputs : WeatherIntent
     object HideInputs : WeatherIntent
-
 }

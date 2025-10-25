@@ -3,9 +3,9 @@ package com.example.gamesessionapp.features.auth.inputs
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -61,7 +61,7 @@ fun PasswordInput(
                 cursorColor = Color.White
             )
         )
-        Divider(
+        HorizontalDivider(
             color = if(isError) Color.Red else Color.DarkGray,
             thickness = 1.dp
         )

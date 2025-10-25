@@ -23,12 +23,11 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-@Composable
+@Composable // Не успел это реализовать, но решил не убирать
 fun SessionBanner(
     modifier: Modifier = Modifier,
     session: SessionEntity
 ) {
-
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -48,7 +47,6 @@ fun SessionBanner(
                 tint = Color.White,
                 modifier = Modifier.size(20.dp)
             )
-
             Text(
                 text = "Ваша сессия длится с ${formatTime(session.startTime)} до ${formatEndTime(session.startTime, session.duration)}",
                 color = Color.White,
@@ -66,3 +64,4 @@ private fun formatEndTime(startTime: LocalDateTime, durationHours: Int): String 
     val endTime = startTime.plusHours(durationHours.toLong())
     return endTime.format(DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault()))
 }
+

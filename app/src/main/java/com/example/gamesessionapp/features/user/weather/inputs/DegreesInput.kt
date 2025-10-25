@@ -3,6 +3,7 @@ package com.example.gamesessionapp.features.user.weather.inputs
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -43,7 +44,7 @@ fun DegreesInput(
                 unfocusedBorderColor = Color.Transparent
             )
         )
-        Divider(
+        HorizontalDivider(
             color = DarkGray,
             thickness = 1.dp
         )

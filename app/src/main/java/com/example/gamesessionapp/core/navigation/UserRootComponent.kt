@@ -8,7 +8,6 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.replaceCurrent
 import com.arkivanov.decompose.value.Value
 import com.example.gamesessionapp.core.navigation.UserRootComponent.Child.*
-import com.example.gamesessionapp.data.local.entity.session.SessionEntity
 import com.example.gamesessionapp.data.repository.user.RoomUserRepository
 import com.example.gamesessionapp.features.user.favorites.FavoriteComponent
 import com.example.gamesessionapp.features.user.news.NewsComponent
@@ -18,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDateTime
 
 interface UserRootComponent {
     val childStack: Value<ChildStack<*, Child>>

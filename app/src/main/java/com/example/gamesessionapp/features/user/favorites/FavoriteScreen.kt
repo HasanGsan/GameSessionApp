@@ -24,8 +24,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gamesessionapp.R
 import com.example.gamesessionapp.features.user.favorites.cards.favoriteCard
 
 
@@ -35,7 +37,6 @@ fun FavoriteScreen(
     component: FavoriteComponent
 ) {
     val uiState = component.state.collectAsState().value
-    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         component.onIntent(FavoriteIntent.LoadFavorites)
@@ -43,12 +44,12 @@ fun FavoriteScreen(
 
     Column(
         modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Black)
-        .padding(10.dp)
+            .fillMaxSize()
+            .background(Color.Black)
+            .padding(10.dp)
     ){
         Text(
-            text = "Избранное",
+            text = stringResource(R.string.title_favorite_text),
             color = Color.White,
             fontSize = 24.sp,
             modifier = Modifier.fillMaxWidth()
@@ -67,9 +68,9 @@ fun FavoriteScreen(
                 Box(
                     modifier = Modifier
                         .border(1.dp, Color.Gray, RoundedCornerShape(3.dp))
-                        .clickable{ component.onIntent(FavoriteIntent.SelectTag(tag)) }
+                        .clickable { component.onIntent(FavoriteIntent.SelectTag(tag)) }
                         .padding(horizontal = 12.dp, vertical = 6.dp)
-                        .background(if(isSelected) Color.DarkGray else Color.Transparent)
+                        .background(if (isSelected) Color.DarkGray else Color.Transparent)
                 ) {
                     Text(text = tag, color = if(isSelected) Color.White else Color.Gray)
                 }

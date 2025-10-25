@@ -22,9 +22,7 @@ class WeatherComponent(
     }
 
     fun onIntent(intent: WeatherIntent) {
-
         when(intent) {
-
             is WeatherIntent.UpdateCity -> {
                 _state.update { it.copy(city = intent.city) }
                 updateFormValidity()

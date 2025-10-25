@@ -44,11 +44,6 @@ object FakeNewsRepository : NewsRepository {
     private val _newsFlow = MutableStateFlow<List<NewsData>>(fakeNews)
     val newsflow: StateFlow<List<NewsData>> = _newsFlow.asStateFlow()
 
-//    suspend fun loadNews(){
-//        val news = getNews()
-//        _newsFlow.value = news
-//    }
-
     override suspend fun getNews(): List<NewsData> = _newsFlow.value
 
     override suspend fun getNewsByCategory(category: String): List<NewsData> =

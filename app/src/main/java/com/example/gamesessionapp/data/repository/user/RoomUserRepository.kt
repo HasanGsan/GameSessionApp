@@ -49,8 +49,10 @@ class RoomUserRepository(private val userDao: UserDao, private val sessionDao: S
 
     suspend fun initDefaultUsers() {
         if(userDao.getUserCount() == 0) {
-            addUser(UserEntity("Логин_Юзера", "1234pass", UserRole.USER))
             addUser(UserEntity("Логин_Админа", "1234pass", UserRole.ADMIN))
+            addUser(UserEntity("Логин_Юзера", "1234pass", UserRole.USER))
+            addUser(UserEntity("Юзер_Один", "1234pass", UserRole.USER))
+            addUser(UserEntity("Юзер_Два", "1234pass", UserRole.USER))
         }
     }
 

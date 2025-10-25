@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.gamesessionapp.R
@@ -31,7 +32,7 @@ fun DateInput(
             .fillMaxWidth()
             .height(54.dp),
         shape = RoundedCornerShape(6.dp),
-        placeholder = { Text("Дата", color = Color.DarkGray) },
+        placeholder = { Text(stringResource(R.string.date_text), color = Color.DarkGray) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         colors = OutlinedTextFieldDefaults.colors(

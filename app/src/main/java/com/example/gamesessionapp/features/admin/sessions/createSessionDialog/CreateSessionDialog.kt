@@ -2,7 +2,6 @@ package com.example.gamesessionapp.features.admin.sessions.createSessionDialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,9 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gamesessionapp.R
 import com.example.gamesessionapp.features.admin.sessions.AdminSessionsIntent
 import com.example.gamesessionapp.features.admin.sessions.AdminSessionsState
 import com.example.gamesessionapp.features.admin.sessions.buttons.ButtonCreateSession
@@ -39,7 +40,7 @@ fun CreateSessionDialog (
     ) {
         Text(
             modifier = modifier.fillMaxWidth(),
-            text = "Создание сессии",
+            text = stringResource(id = R.string.title_session_create),
             color = Color.White,
             fontSize = 20.sp,
             textAlign = TextAlign.Center
@@ -76,7 +77,7 @@ fun CreateSessionDialog (
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "ПОЛЬЗОВАТЕЛИ",
+            text = stringResource(id = R.string.all_user_title),
             color = Color.White,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -115,7 +116,5 @@ fun CreateSessionDialog (
                 onClick = { onIntent(AdminSessionsIntent.CreateSession) }
             )
         }
-
-
     }
 }

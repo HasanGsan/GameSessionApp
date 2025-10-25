@@ -1,8 +1,6 @@
 package com.example.gamesessionapp.features.user.news
 
 import com.arkivanov.decompose.ComponentContext
-import com.example.gamesessionapp.data.repository.news.FakeNewsRepository
-import com.example.gamesessionapp.data.repository.news.NewsRepository
 import com.example.gamesessionapp.data.repository.room.news.RoomNewsRepository
 import com.example.gamesessionapp.data.uiState.items.NewsItemUiState
 import kotlinx.coroutines.CoroutineScope
@@ -79,7 +77,6 @@ class NewsComponent(
         val updated = _state.value.newsItems.map {
             if(it.newsData.id == newsId) it.copy(isFavorite = !isCurrentFavorite) else it
         }
-
         _state.update { it.copy(newsItems = updated) }
     }
 }

@@ -5,13 +5,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.gamesessionapp.R
 import com.example.gamesessionapp.features.admin.management.AdminManagementIntent
 import com.example.gamesessionapp.features.admin.management.AdminManagementState
 import com.example.gamesessionapp.features.admin.management.buttons.CreateUserButton
@@ -32,7 +33,7 @@ fun CreateUserDialog(
             .padding(24.dp)
     ) {
         Text(
-            text = "Создание пользователя",
+            text = stringResource(R.string.title_create_user_text),
             fontSize = 20.sp,
             color = Color.Black,
             modifier = Modifier.padding(bottom = 24.dp)
@@ -67,8 +68,5 @@ fun CreateUserDialog(
                 .height(48.dp),
             isEnabled = state.isCreateUserFormValid
         )
-
-
-
     }
 }
